@@ -20,64 +20,14 @@ QUnit.test('environment sanity check', function () {
   QUnit.object(document, 'document object exists');
 });
 
-QUnit.test('last service overrides by default', function () {
-  var angular = benv.require('../bower_components/angular/angular.js', 'angular');
-
-  var module = angular.module('A', []);
-  var ServiceA = function () {
-    this.name = 'ServiceA';
-  };
-  var ServiceB = function () {
-    this.name = 'ServiceB';
-  };
-
-  // initial definition
-  module.service('someService', ServiceA);
-
-  // first override
-  module.service('someService', ServiceB);
-
-  var someService = angular.injector(['ng', 'A']).get('someService');
-  QUnit.equal(someService.name, 'ServiceB', 'someService -> second service');
-
-  // undefined override
-  module.service('someService');
-
-  QUnit.throws(function() {
-    angular.injector(['ng', 'A']).get('someService');
-  }, 'Error');
-
-  // value override
-  module.value('someService', new ServiceA());
-  someService = angular.injector(['ng', 'A']).get('someService');
-  QUnit.equal(someService.name, 'ServiceA', 'someService -> third service');
-
-  // factory override
-  module.factory('someService', function () {
-    return new ServiceB();
-  });
-  someService = angular.injector(['ng', 'A']).get('someService');
-  QUnit.equal(someService.name, 'ServiceB', 'someService -> fourth service');
-
-  // provider override
-  module.provider('someService', function () {
-    this.$get = function () {
-      return new ServiceA();
-    };
-  });
-  someService = angular.injector(['ng', 'A']).get('someService');
-  QUnit.equal(someService.name, 'ServiceA', 'someService -> fifth service');
-});
-
-
 QUnit.test('stop angular service override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  angular.module('A1', []).service('someService', function () {});
+  angular.module('serviceoverridetest1module1', []).service('someServiceTest1', function () {});
 
   QUnit.throws(function () {
-    angular.module('A2', []).service('someService', function () {});
+    angular.module('serviceoverridetest1module2', []).service('someServiceTest1', function () {});
   }, 'Error');
 });
 
@@ -85,10 +35,10 @@ QUnit.test('stop angular service (value) override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  angular.module('A1', []).service('someService', function () {});
+  angular.module('serviceoverridetest2module1', []).service('someServiceTest2', function () {});
 
   QUnit.throws(function () {
-    angular.module('A2', []).value('someService', {});
+    angular.module('serviceoverridetest2module2', []).value('someServiceTest2', {});
   }, 'Error');
 });
 
@@ -96,10 +46,10 @@ QUnit.test('stop angular service (factory) override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  angular.module('A1', []).service('someService', function () {});
+  angular.module('serviceoverridetest3module1', []).service('someServiceTest3', function () {});
 
   QUnit.throws(function () {
-    angular.module('A2', []).factory('someService', function () {});
+    angular.module('serviceoverridetest2module2', []).factory('someServiceTest3', function () {});
   }, 'Error');
 });
 
@@ -107,10 +57,10 @@ QUnit.test('stop angular service (provider) override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  angular.module('A1', []).service('someService', function () {});
+  angular.module('serviceoverridetest4module1', []).service('someServiceTest4', function () {});
 
   QUnit.throws(function () {
-    angular.module('A2', []).provider('someService', function () {});
+    angular.module('serviceoverridetest4module2', []).provider('someServiceTest4', function () {});
   }, 'Error');
 });
 
@@ -119,49 +69,49 @@ QUnit.test('stops service overrides with undefined', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var module = angular.module('A', []);
+  var module = angular.module('serviceoverridetest5module', []);
 
-  module.service('someService', function () {});
+  module.service('someServiceTest5', function () {});
 
   QUnit.throws(function() {
-    module.service('someService');
+    module.service('someServiceTest5');
   }, 'Error');
 });
 
 
-QUnit.test('default behavior is not changed for initial service definition', function () {
+QUnit.test('default behaviour is not changed for initial service definition', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var module = angular.module('A', []);
+  var module = angular.module('serviceoverridetest6module', []);
 
   function SomeService () {
-    this.name = 'SomeService';
+    this.name = 'someServiceTest6';
   }
 
   // service behavior
-  module.service('someService', SomeService);
-  var someService = angular.injector(['ng', 'A']).get('someService');
-  QUnit.equal(someService.name, 'SomeService');
+  module.service('someServiceTest6', SomeService);
+  var someService = angular.injector(['ng', 'serviceoverridetest6module']).get('someServiceTest6');
+  QUnit.equal(someService.name, 'someServiceTest6');
 
   // factory behavior
-  module.factory('someFactoryService', function () {
+  module.factory('someFactoryServiceTest6', function () {
     return new SomeService();
   });
-  var someFactoryService = angular.injector(['ng', 'A']).get('someFactoryService');
-  QUnit.equal(someFactoryService.name, 'SomeService');
+  var someFactoryService = angular.injector(['ng', 'serviceoverridetest6module']).get('someFactoryServiceTest6');
+  QUnit.equal(someFactoryService.name, 'someServiceTest6');
 
   // value behavior
-  module.value('someValueService', new SomeService());
-  var someValueService = angular.injector(['ng', 'A']).get('someValueService');
-  QUnit.equal(someValueService.name, 'SomeService');
+  module.value('someValueServiceTest6', new SomeService());
+  var someValueService = angular.injector(['ng', 'serviceoverridetest6module']).get('someValueServiceTest6');
+  QUnit.equal(someValueService.name, 'someServiceTest6');
 
   // provider behavior
-  module.provider('someProviderService', function () {
+  module.provider('someProviderServiceTest6', function () {
     this.$get = function () {
       return new SomeService();
     };
   });
-  var someProviderService = angular.injector(['ng', 'A']).get('someProviderService');
-  QUnit.equal(someProviderService.name, 'SomeService');
+  var someProviderService = angular.injector(['ng', 'serviceoverridetest6module']).get('someProviderServiceTest6');
+  QUnit.equal(someProviderService.name, 'someServiceTest6');
 });

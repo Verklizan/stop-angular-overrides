@@ -1,66 +1,69 @@
 /* global window */
 (function stopAngularOverrides(angular) {
-  'use strict';
+    'use strict';
 
-  if (!angular) {
-    throw new Error('Missing angular');
-  }
-
-  var _module = angular.bind(angular, angular.module);
-
-  function createUniqueNamingCheckFn(type) {
-    var existingNames = Object.create(null);
-    return function (name) {
-      if (existingNames[name]) {
-        throw new Error('Angular ' + type + ' ' + name + ' already exists');
-      }
-      existingNames[name] = true;
-    };
-  }
-
-  var existingModulesCheck = createUniqueNamingCheckFn('module');
-  var existingFiltersCheck = createUniqueNamingCheckFn('filter');
-  var existingControllersCheck = createUniqueNamingCheckFn('controller');
-  var existingServicesCheck = createUniqueNamingCheckFn('service');
-  var existingDirectivesCheck = createUniqueNamingCheckFn('directive');
-
-  function createProxyFn(module, moduleFn, existingNameCheck) {
-    return function (name, fn) {
-      existingNameCheck(name);
-      return moduleFn.call(module, name, fn);
-    };
-  }
-
-  angular.module = function (name, deps) {
-    if (!deps) {
-      return _module(name);
+    if (!angular) {
+        throw new Error('Missing angular');
     }
-    existingModulesCheck(name);
 
-    var m = _module(name, deps);
+    var _module = angular.bind(angular, angular.module);
 
-    // proxy .filter calls to the new module
-    m.filter = createProxyFn(m, m.filter, existingFiltersCheck);
+    function createUniqueNamingCheckFn(type) {
+        var existingNames = Object.create(null);
+        return function (name) {
+            if (existingNames[name]) {
+                throw new Error('Angular ' + type + ' ' + name + ' already exists');
+            }
+            existingNames[name] = true;
+        };
+    }
 
-    // proxy .controller calls to the new module
-    m.controller = createProxyFn(m, m.controller, existingControllersCheck);
+    var existingModulesCheck = createUniqueNamingCheckFn('module');
+    var existingFiltersCheck = createUniqueNamingCheckFn('filter');
+    var existingControllersCheck = createUniqueNamingCheckFn('controller');
+    var existingServicesCheck = createUniqueNamingCheckFn('service');
+    var existingDirectivesCheck = createUniqueNamingCheckFn('directive');
 
-    // proxy .directive calls to the new module
-    m.directive = createProxyFn(m, m.directive, existingDirectivesCheck);
+    function createProxyFn(module, moduleFn, existingNameCheck) {
+        return function () {
+            var name = arguments[0];
+            existingNameCheck(name);
+            return moduleFn.apply(null, arguments);
+        };
+    }
 
-    // proxy .service calls to the new module
-    m.service = createProxyFn(m, m.service, existingServicesCheck);
+    angular.module = function () {
+        var name = arguments[0];
+        var deps = arguments[1];
+        if (!deps) {
+            return _module(name);
+        }
+        existingModulesCheck(name);
 
-    // proxy .factory calls to the new module
-    m.factory = createProxyFn(m, m.factory, existingServicesCheck);
+        var m = _module.apply(null, arguments);
 
-    // proxy .value calls to the new module
-    m.value = createProxyFn(m, m.value, existingServicesCheck);
+        // proxy .filter calls to the new module
+        m.filter = createProxyFn(m, m.filter, existingFiltersCheck);
 
-    // proxy .provider calls to the new module
-    m.provider = createProxyFn(m, m.provider, existingServicesCheck);
+        // proxy .controller calls to the new module
+        m.controller = createProxyFn(m, m.controller, existingControllersCheck);
 
-    return m;
-  };
+        // proxy .directive calls to the new module
+        m.directive = createProxyFn(m, m.directive, existingDirectivesCheck);
+
+        // proxy .service calls to the new module
+        m.service = createProxyFn(m, m.service, existingServicesCheck);
+
+        // proxy .factory calls to the new module
+        m.factory = createProxyFn(m, m.factory, existingServicesCheck);
+
+        // proxy .value calls to the new module
+        m.value = createProxyFn(m, m.value, existingServicesCheck);
+
+        // proxy .provider calls to the new module
+        m.provider = createProxyFn(m, m.provider, existingServicesCheck);
+
+        return m;
+    };
 
 }(window.angular));

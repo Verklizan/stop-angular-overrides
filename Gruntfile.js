@@ -7,14 +7,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    'nice-package': {
-      all: {
-        options: {
-          blankLine: true
-        }
-      }
-    },
-
     jshint: {
       'options': {
         jshintrc: '.jshintrc'
@@ -37,5 +29,5 @@ module.exports = function (grunt) {
   var plugins = module.require('matchdep').filterDev('grunt-*');
   plugins.forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask('default', ['deps-ok', 'nice-package', 'sync', 'jshint']);
+  grunt.registerTask('default', ['deps-ok', 'sync', 'jshint']);
 };

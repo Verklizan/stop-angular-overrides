@@ -26,12 +26,6 @@ QUnit.test('loading angular', function () {
   QUnit.func(angular.module, 'angular.module is an object');
 });
 
-QUnit.test('angular check', function () {
-  QUnit.throws(function() {
-    benv.require('../stop-angular-overrides.js');
-  }, 'Missing angular');
-});
-
 QUnit.test('angular.bind', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   QUnit.func(angular.bind, 'angular.bind is a function');
@@ -45,68 +39,15 @@ QUnit.test('angular.bind', function () {
   QUnit.equal(name(), foo.name);
 });
 
-QUnit.test('last module overrides by default', function () {
-  var angular = benv.require('../bower_components/angular/angular.js', 'angular');
-  var first = angular.module('A', []);
-  QUnit.equal(angular.module('A'), first, 'A -> first module');
-
-  var second = angular.module('A', []);
-  QUnit.equal(angular.module('A'), second, 'A -> second module');
-});
-
-QUnit.test('last controller overrides by default', function () {
-  var angular = benv.require('../bower_components/angular/angular.js', 'angular');
-
-  var module = angular.module('A', []);
-  var First = function () {};
-  var Second = function () {
-    this.name = 'second';
-  };
-
-  module.controller('aController', First);
-  module.controller('aController', Second);
-
-  var $controller = angular.injector(['ng', 'A']).get('$controller');
-  var pseudoScope = $controller('aController', {$scope: {}});
-  QUnit.equal(pseudoScope.name, 'second', 'aController -> second controller');
-
-  module.controller('aController');
-  $controller = angular.injector(['ng', 'A']).get('$controller');
-
-  QUnit.throws(function() {
-    $controller('aController', {$scope: {}});
-  }, 'Argument \'aController\' is not a function, got undefined');
-});
-
-QUnit.test('last filter overrides by default', function () {
-  var angular = benv.require('../bower_components/angular/angular.js', 'angular');
-
-  var module = angular.module('A', []);
-  var secondFilter = function () {};
-
-  module.filter('aFilter', function () { });
-  module.filter('aFilter', function () { return secondFilter; });
-
-  var $filter = angular.injector(['ng', 'A']).get('$filter');
-  var loadedFilter = $filter('aFilter');
-  QUnit.equal(loadedFilter, secondFilter, 'aFilter -> secondFilter');
-
-  module.filter('aFilter');
-
-  QUnit.throws(function() {
-    angular.injector(['ng', 'A']).get('$filter');
-  }, 'Error');
-});
-
 QUnit.test('stop angular override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var first = angular.module('A', []);
-  QUnit.equal(angular.module('A'), first, 'A -> first module');
+  var first = angular.module('AngularOverrideTest', []);
+  QUnit.equal(angular.module('AngularOverrideTest'), first, 'AngularOverrideTest -> first module');
 
   QUnit.throws(function () {
-    angular.module('A', []);
+    angular.module('AngularOverrideTest', []);
   }, 'Error');
 });
 
@@ -114,10 +55,10 @@ QUnit.test('stop angular controller override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  angular.module('A1', []).controller('controller', function () {});
+  angular.module('AngularOverrideControllerTest', []).controller('controller', function () {});
 
   QUnit.throws(function () {
-    angular.module('A2', []).controller('controller', function () {});
+    angular.module('AngularOverrideControllerTest', []).controller('controller', function () {});
   }, 'Error');
 });
 
@@ -125,19 +66,18 @@ QUnit.test('stop angular filter override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  angular.module('A1', []).filter('f', function () {});
+  angular.module('AngularOverrideFilterTest', []).filter('f', function () {});
 
   QUnit.throws(function () {
-    angular.module('A2', []).filter('f', function () {});
+    angular.module('AngularOverrideFilterTest', []).filter('f', function () {});
   }, 'Error');
 });
-
 
 QUnit.test('stops controller overrides with undefined', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var module = angular.module('A', []);
+  var module = angular.module('AngularOverrideControllerUndefinedTest', []);
 
   module.controller('aController', function () {});
 
@@ -150,7 +90,7 @@ QUnit.test('stops filter overrides with undefined', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var module = angular.module('A', []);
+  var module = angular.module('AngularOverrideFilterUndefinedTest', []);
   module.filter('aFilter', function () { });
 
   QUnit.throws(function() {
@@ -162,14 +102,14 @@ QUnit.test('default behavior is not changed for initial filter definition', func
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var module = angular.module('A', []);
+  var module = angular.module('AngularOverrideInitialFilterTest', []);
 
   function someFilter() { }
 
   module.filter('someFilter', function() {
     return someFilter;
   });
-  var $filter = angular.injector(['ng', 'A']).get('$filter');
+  var $filter = angular.injector(['ng', 'AngularOverrideInitialFilterTest']).get('$filter');
   var someFilterLoaded = $filter('someFilter');
   QUnit.equal(someFilterLoaded, someFilter);
 
@@ -179,13 +119,13 @@ QUnit.test('default behavior is not changed for initial controller definition', 
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
 
-  var module = angular.module('A', []);
+  var module = angular.module('AngularOverrideInitialControllerTest', []);
 
   module.controller('someController', function() {
     this.name = 'someController';
   });
 
-  var $controller = angular.injector(['ng', 'A']).get('$controller');
+  var $controller = angular.injector(['ng', 'AngularOverrideInitialControllerTest']).get('$controller');
   var someControllerInstance = $controller('someController', {$scope: {}});
   QUnit.equal(someControllerInstance.name, 'someController');
 });

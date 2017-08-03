@@ -3,11 +3,9 @@
 > Prevents silent angular module / controller / filter / service / directive overrides
 
 [![Build status][stop-angular-overrides-ci-image] ][stop-angular-overrides-ci-url]
-[![Coverage Status][stop-angular-overrides-coverage-image]][stop-angular-overrides-coverage-url]
-[![dependencies][stop-angular-overrides-dependencies-image] ][stop-angular-overrides-dependencies-url]
-[![devdependencies][stop-angular-overrides-devdependencies-image] ][stop-angular-overrides-devdependencies-url]
 
-`bower install stop-angular-overrides --save`
+Fork of https://github.com/bahmutov/stop-angular-overrides/blob/master/package.json
+Updated for Angular 1.5.8 and higher
 
 ```
 <script src="bower_components/angular/angular.js"></script>
@@ -21,15 +19,13 @@ Uncaught Error: Angular module A already exists stop-module-override.js:17
   (anonymous function)
 ```
 
-Basically maintains lightweight cache of registered angular names
+
+Maintains cache of registered angular names
 to prevent collision. Any attempt to override existing module / controller / filter / service
 results in an exception with details. Make sure to use function names when
 registering modules to get meaningful stack for easier debugging.
 This script is good for debugging environment, probably not necessary to run
 in production.
-
-Namespacing other conventions are good practice, but not really
-enforceable 100%, so I created this script. It prevents run-time overriding via these calls
 
 * angular.module
 * angular.filter (across all filter names)
@@ -44,10 +40,7 @@ enforceable 100%, so I created this script. It prevents run-time overriding via 
 
 ## Overriding entities in Angular
 
-The overriding situation in Angular becomes terrible and hair-pulling as soon as you
-have several people working on the same web app. Name clashes can happen anywhere
-and result in silent and very non-obvious failures. Here is an example where the
-second module with the same name wins:
+Angular overrides previously defined filters/directives/services/etc. Without throwing even a warning.
 
 ```js
 angular.module('A', [])
@@ -70,7 +63,7 @@ Last registered entity with same name wins. In this case, second module with
 name A and filter F wins. To avoid the situation, we can change each module to
 have a different name. What about filters? They can clash across modules!
 This might be a design decision (allows overriding logic based on the closes module),
-but definitely causes weird behavior:
+but definitely causes weird behaviour:
 
 ```js
 angular.module('A', [])
@@ -103,15 +96,13 @@ used in side the `<a-directive>`? Depends on which controller is closest!
 `module A: a-directive, filter result F2`
 
 Even creating a controller for the `a-directive` does not help, the second
-unrelated module wins just because it surrounds the element on the page. Madness.
-
-## Unit testing
-
-I unit tested the script using browser simulation under Nodejs.
-See my [blog post](http://glebbahmutov.com/blog/unit-testing-angular-load-using-node/)
-and [test.js](test/test.js)
+unrelated module wins just because it surrounds the element on the page.
 
 ### Small print
+
+Author: Verklizan B.V. &copy; 2017
+
+* [verklizan.com](http://verklizan.com)
 
 Author: Gleb Bahmutov &copy; 2014
 
@@ -119,15 +110,11 @@ Author: Gleb Bahmutov &copy; 2014
 * [glebbahmutov.com](http://glebbahmutov.com)
 * [blog](http://glebbahmutov.com/blog/)
 
-License: MIT - do anything with the code, but don't blame me if it does not work.
-
-Spread the word: tweet, star on github, etc.
-
-Support: if you find any problems with this module, email / tweet /
-[open issue](https://github.com/bahmutov/stop-angular-overrides/issues) on Github
+License: MIT
 
 ### Contributors
 
+* [Tristan Benschop](https://github.com/TristanBenschop)
 * [Gleb Bahmutov](https://github.com/bahmutov)
 * [Tilman Potthof](https://github.com/tilmanpotthof)
 
@@ -156,13 +143,5 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
-[stop-angular-overrides-icon]: https://nodei.co/npm/stop-angular-overrides.png?downloads=true
-[stop-angular-overrides-url]: https://npmjs.org/package/stop-angular-overrides
-[stop-angular-overrides-ci-image]: https://travis-ci.org/bahmutov/stop-angular-overrides.svg?branch=master
-[stop-angular-overrides-ci-url]: https://travis-ci.org/bahmutov/stop-angular-overrides
-[stop-angular-overrides-coverage-image]: https://coveralls.io/repos/bahmutov/stop-angular-overrides/badge.svg
-[stop-angular-overrides-coverage-url]: https://coveralls.io/r/bahmutov/stop-angular-overrides
-[stop-angular-overrides-dependencies-image]: https://david-dm.org/bahmutov/stop-angular-overrides.svg
-[stop-angular-overrides-dependencies-url]: https://david-dm.org/bahmutov/stop-angular-overrides
-[stop-angular-overrides-devdependencies-image]: https://david-dm.org/bahmutov/stop-angular-overrides/dev-status.svg
-[stop-angular-overrides-devdependencies-url]: https://david-dm.org/bahmutov/stop-angular-overrides#info=devDependencies
+[stop-angular-overrides-ci-image]: https://travis-ci.org/TristanBenschop/stop-angular-overrides.svg?branch=master
+[stop-angular-overrides-ci-url]: https://travis-ci.org/TristanBenschop/stop-angular-overrides

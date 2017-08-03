@@ -20,31 +20,6 @@ QUnit.test('environment sanity check', function () {
   QUnit.object(document, 'document object exists');
 });
 
-QUnit.test('last directive overrides by default', function () {
-  var angular = benv.require('../bower_components/angular/angular.js', 'angular');
-
-  var module = angular.module('A', []);
-
-  // initial definition
-  module.directive('someDirective', function () { });
-
-  // first override
-  module.directive('someDirective', function () {
-    return {
-      restrict: 'E',
-      replace: true,
-      template: '<div>Some Directive</div>'
-    };
-  });
-
-  var $compile = angular.injector(['ng', 'A']).get('$compile');
-  var $rootScope = angular.injector(['ng', 'A']).get('$rootScope');
-  var $element = $compile('<some-directive></some-directive>')($rootScope);
-
-  QUnit.equal($element[0].tagName, 'DIV');
-});
-
-
 QUnit.test('stop angular directive override', function () {
   var angular = benv.require('../bower_components/angular/angular.js', 'angular');
   benv.require('../stop-angular-overrides.js');
@@ -63,7 +38,7 @@ QUnit.test('default behavior is not changed for initial directive definition', f
   var module = angular.module('A', []);
 
   // initial definition
-  module.directive('someDirective', function () {
+  module.directive('anotherDirective', function () {
     return {
       restrict: 'E',
       replace: true,
@@ -73,7 +48,7 @@ QUnit.test('default behavior is not changed for initial directive definition', f
 
   var $compile = angular.injector(['ng', 'A']).get('$compile');
   var $rootScope = angular.injector(['ng', 'A']).get('$rootScope');
-  var $element = $compile('<some-directive></some-directive>')($rootScope);
+  var $element = $compile('<another-directive></another-directive>')($rootScope);
 
   QUnit.equal($element[0].tagName, 'DIV');
 });
