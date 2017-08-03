@@ -143,5 +143,5 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
-[stop-angular-overrides-ci-image]: https://travis-ci.org/TristanBenschop/stop-angular-overrides.svg?branch=master
-[stop-angular-overrides-ci-url]: https://travis-ci.org/TristanBenschop/stop-angular-overrides
+[stop-angular-overrides-ci-image]: https://travis-ci.org/Verklizan/stop-angular-overrides.svg?branch=master
+[stop-angular-overrides-ci-url]: https://travis-ci.org/Verklizan/stop-angular-overrides
