@@ -114,6 +114,7 @@ License: MIT
 
 ### Contributors
 
+* [Verklizan](https://github.com/Verklizan)
 * [Tristan Benschop](https://github.com/TristanBenschop)
 * [Gleb Bahmutov](https://github.com/bahmutov)
 * [Tilman Potthof](https://github.com/tilmanpotthof)

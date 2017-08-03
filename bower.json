@@ -2,7 +2,7 @@
   "name": "stop-angular-overrides",
   "main": "stop-angular-overrides.js",
   "version": "1.0.0",
-  "homepage": "https://github.com/TristanBenschop/stop-angular-overrides",
+  "homepage": "https://github.com/Verklizan/stop-angular-overrides",
   "description": "Prevents silent angular module / controller / filter / service / directive overrides",
   "keywords": [
     "angular",
@@ -23,6 +23,7 @@
     "angular": "~1.5.8"
   },
   "authors": [
+    "Verklizan B.V. <github@verklizan.com",
     "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
   ]
 }

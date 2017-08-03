@@ -2,11 +2,12 @@
   "name": "stop-angular-overrides",
   "description": "Prevents silent angular module / controller / filter / service / directive overrides",
   "version": "1.0.0",
-  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "author": "Verklizan B.V. <github@verklizan.com>",
   "contributors": [
     "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
     "Tilman Potthof <tilmanpotthof@gmail.com>",
-    "Tristan Benschop <tbenschop@verklizan.com>"
+    "Tristan Benschop <tbenschop@verklizan.com>",
+    "Verklizan B.V. <github@verklizan.com"
   ],
   "dependencies": {},
   "devDependencies": {
@@ -29,7 +30,7 @@
   "engines": {
     "node": "> 0.8"
   },
-  "homepage": "https://github.com/TristanBenschop/stop-angular-overrides",
+  "homepage": "https://github.com/Verklizan/stop-angular-overrides",
   "keywords": [
     "angular",
     "stop",
@@ -46,7 +47,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/TristanBenschop/stop-angular-overrides.git"
+    "url": "git://github.com/Verklizan/stop-angular-overrides.git"
   },
   "scripts": {
     "build": "grunt",
